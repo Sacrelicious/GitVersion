@@ -41,6 +41,16 @@
                 return null;
             }
 
+            if (configuration.CommitsToIgnore != null && configuration.CommitsToIgnore.Contains(mergeCommit.Sha))
+            {
+                return null;
+            }
+
+            if (configuration.MergeMessagesToIgnore != null && configuration.MergeMessagesToIgnore.Any(x => mergeCommit.Message.Contains(x)))
+            {
+                return null;
+            }
+
             //TODO: Make the version prefixes customizable
             var possibleVersions = Regex.Matches(mergeCommit.Message, @"^.*?(([rR]elease|[hH]otfix|[aA]lpha)-|-v|/|/v|'|Finish )(?<PossibleVersions>\d+\.\d+(\.*\d+)*)")
                 .Cast<Match>()
